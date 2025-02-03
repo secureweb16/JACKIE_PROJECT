@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import * as XLSX from "xlsx";
 import Image from "next/image";
+import Headers from "../components/Headers";
 interface UploadedDocument {
   name: string;
   uploadedAt: string;
@@ -127,21 +128,21 @@ export default function FileUpload() {
       if (data.success) {
         setFiles([null, null, null]);
         fetchFileDetails();
-        toast.success("Files Upload Successfully"); 
+        toast.success("Files Upload Successfully");
 
         setSuccess("Files uploaded successfully.");
         router.push("/report");
         setIsModalOpen(false);
       } else {
-        // toast.success("Files Upload Successfully");  // Show success toast
-        toast.error("Invalid file type! Please upload a correct file in the box.")
+        toast.error(
+          "Invalid file type! Please upload a correct file in the box."
+        );
         setFiles([null, null, null]);
 
-        // setError("Please upload file in mention format and order.");
         setTimeout(() => setError(null), 5000);
       }
     } catch {
-      toast.error("Somethng went wrong please try again  "); // Show success toast
+      toast.error("Somethng went wrong please try again  ");
       setFiles([null, null, null]);
 
       setIsUploading(false);
@@ -154,7 +155,7 @@ export default function FileUpload() {
     Cookies.remove("authToken", { path: "" });
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");
-    toast.success("Logout successful!"); // Show success toast
+    toast.success("Logout successful!");
 
     router.push("/login");
   };
@@ -196,28 +197,7 @@ export default function FileUpload() {
   return (
     <div className="main_body min-h-screen bg-gray-100  relative w-full  ">
       {/* Header */}
-      <div className="header">
-        <div className="text-xl font-semibold">Welcome to Dashboard</div>
-        <div className="header_nav">
-          <ul>
-            <li>
-              <a href="/dashboard">Dashboard</a>
-            </li>
-            <li>
-              <a href="/report">Reports</a>
-            </li>
-          </ul>
-        </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-lg">{userName || "Guest"}</span>
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-500 transition"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+      <Headers />
       <div className="main_file_wrapper">
         {/* Upload Button */}
         <div className=" Upload_title_wrapper">
@@ -399,8 +379,6 @@ export default function FileUpload() {
               )}
             </div>
           </div>
-
-          {/* Uploaded Documents */}
         </div>
       </div>
     </div>

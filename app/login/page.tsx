@@ -2,8 +2,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation"; 
 import Cookies from 'js-cookie';
-import { toast, Toaster } from 'react-hot-toast';  // Import the toast function
-
+import { toast, Toaster } from 'react-hot-toast'; 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

@@ -1,14 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import * as XLSX from "xlsx";
+import Headers from "@/app/components/Headers";
 
 // Define types for the data and state
 interface FileDetail {
   Customer: string;
   Total: number;
-  [key: string]: number | string; // to handle dynamic date keys and Customer
+  [key: string]: number | string; 
 }
 
 interface PivotData {
@@ -24,9 +23,7 @@ const Page = () => {
   const [fileDetails, setFileDetails] = useState<FileDetail[]>([]);
   console.log(fileDetails,"fileDetails")
   const [formattedData, setFormattedData] = useState<{ pivotData: PivotData; sortedDates: string[] }>({ pivotData: {}, sortedDates: [] });
-  const [userName, setUserName] = useState<string | null>(null);
   const [id, setId] = useState<string | null>(null);
-  const router = useRouter();
 
   // Fetch file details with the `id`
   const fetchFileDetails = async () => {
@@ -68,20 +65,8 @@ const Page = () => {
     }
   }, [id]); // Re-run when `id` changes
 
-  const handleLogout = () => {
-    Cookies.remove("authToken");
-    Cookies.remove("authToken", { path: "" });
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-    router.push("/login");
-  };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUserName = localStorage.getItem("userName");
-      setUserName(storedUserName);
-    }
-  }, []);
+
 
   // Function to transform data into pivot format
   const processData = (data: FileDetail[]) => {
@@ -150,28 +135,7 @@ const Page = () => {
       ) : (
         <>
           {/* Header */}
-          <div className="header">
-            <div className="text-xl font-semibold">Welcome to Dashboard</div>
-            <div className="header_nav">
-              <ul>
-                <li>
-                  <a href="/dashboard">Dashboard</a>
-                </li>
-                <li>
-                  <a href="/report">Reports</a>
-                </li>
-              </ul>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-lg">{userName || "Guest"}</span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-500 transition"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
+       <Headers/>
 
           {/* Pivot Table */}
           <div className="relative w-[90%] mx-auto ">
