@@ -28,11 +28,11 @@ const Headers = () => {
       <div className="header">
         <div className="text-xl font-semibold">Welcome to Dashboard</div>
         <div className="header_nav">
-          <ul>
-            <li>
+          <ul >
+            <li className="hover:underline">
               <a href="/dashboard">Dashboard</a>
             </li>
-            <li>
+            <li className="hover:underline">
               <a href="/report">Reports</a>
             </li>
           </ul>

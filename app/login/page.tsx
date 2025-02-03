@@ -39,6 +39,8 @@ export default function LoginPage() {
       } else {
         toast.error("Invalid credentials. Please try again.");  
         setError("Invalid credentials. Please try again.");
+        setTimeout(() => setError(""), 5000);
+
       }
     } catch (err) {
       console.error(err);

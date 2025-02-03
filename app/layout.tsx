@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import AuthCheck from "./components/AuthCheck";
+// import AuthCheck from "./components/AuthCheck";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,11 +33,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <AuthCheck>
+          {/* <AuthCheck> */}
 
           <Toaster position="top-center" />
           {children}
-          </AuthCheck>
+          {/* </AuthCheck> */}
        
       </body>
     </html>

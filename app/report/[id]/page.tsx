@@ -25,7 +25,6 @@ const Page = () => {
   const [formattedData, setFormattedData] = useState<{ pivotData: PivotData; sortedDates: string[] }>({ pivotData: {}, sortedDates: [] });
   const [id, setId] = useState<string | null>(null);
 
-  // Fetch file details with the `id`
   const fetchFileDetails = async () => {
     if (!id) {
       setError("ID not found");
@@ -51,19 +50,18 @@ const Page = () => {
     }
   };
 
-  // Handle window.location safely
   useEffect(() => {
     if (typeof window !== "undefined") {
       const pathId = window.location.pathname.split("/").pop();
-      setId(pathId || null); // Set the id from the router query
+      setId(pathId || null);
     }
   }, []);
 
   useEffect(() => {
     if (id) {
-      fetchFileDetails(); // Fetch details when `id` is available
+      fetchFileDetails(); 
     }
-  }, [id]); // Re-run when `id` changes
+  }, [id]); 
 
 
 

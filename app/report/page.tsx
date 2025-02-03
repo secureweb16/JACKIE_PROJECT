@@ -1,23 +1,24 @@
-
-
 "use client";
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Headers from "../components/Headers";
 
 const Page = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  console.log(error,"error")
+  console.log(error, "error");
   const [userName, setUserName] = useState<string | null>(null);
-  const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
+  console.log(userName, "userName");
+  const [uploadedDocuments, setUploadedDocuments] = useState<
+    UploadedDocument[]
+  >([]);
   const router = useRouter();
 
   interface UploadedDocument {
     name: string;
     uploadedAt: string;
-    _id: string; // Ensure _id is available for navigation
+    _id: string;
   }
 
   const fetchFileDetails = async () => {
@@ -51,76 +52,52 @@ const Page = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    Cookies.remove("authToken");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-    router.push("/login");
-  };
-
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <div className="header">
-              <div className="text-xl font-semibold">Welcome to Dashboard</div>
-              <div className="header_nav">
-                <ul>
-                  <li>
-                    <a href="/dashboard">Dashboard</a>
-                  </li>
-                  <li>
-                    <a href="/report">Reports</a>
-                  </li>
-                
-                </ul>
-              </div>
-              <div className="flex items-center space-x-4">
-                <span className="text-lg">{userName || "Guest"}</span>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-500 transition"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-            <div className=" Upload_title_wrapper mt-8">
-          <h2>
-         List of Converted Report
-          </h2>
-        </div>
+      <Headers />
+      <div className=" Upload_title_wrapper mt-8">
+        <h2>List of Converted Report</h2>
+      </div>
       {/* Uploaded Documents */}
       <div className="p-8">
         {isFetching ? (
           <div className="flex justify-center items-center h-40">
             <p className="text-gray-500 text-xl animate-pulse">Loading...</p>
           </div>
-
         ) : uploadedDocuments?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-       
-           
             {uploadedDocuments.map((doc, index) => (
               <div
                 key={index}
                 className="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:shadow-xl "
-                onClick={() => router.push(`/report/${doc._id}`)} 
+                onClick={() => router.push(`/report/${doc._id}`)}
               >
                 <h3 className="text-lg font-semibold text-gray-800">
                   📄 {doc.name + " " + (index + 1)}
                 </h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  Uploaded: {new Date(doc.uploadedAt).toISOString().split("T")[0]}
+                <p className="text-sm text-gray-800 mt-1">
+                  <span className="font-semibold text-gray-800">
+                    Uploaded At:
+                  </span>{" "}
+                  {new Date(doc.uploadedAt).toISOString().split("T")[0]}
                 </p>
                 <div className="flex justify-end mt-4 ">
-                  <Image src="/images/eye.png" alt="View Report" width={40} height={30} />
+                  <Image
+                    src="/images/eye.png"
+                    alt="View Report"
+                    width={40}
+                    height={30}
+                  />
                 </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="flex justify-center items-center h-40">
-            <p className="text-gray-500 text-xl text-center">No documents uploaded yet.</p>
+            <p className="text-gray-500 text-xl text-center">
+              No documents uploaded yet.
+            </p>
           </div>
         )}
       </div>
@@ -129,4 +106,3 @@ const Page = () => {
 };
 
 export default Page;
-
