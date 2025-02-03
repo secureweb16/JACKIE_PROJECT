@@ -25,3 +25,138 @@ body {
     text-wrap: balance;
   }
 }
+
+
+/*----- Dashboard Css -----*/
+.main_body {
+  background: #fff;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0px 1px 10px -1px rgb(0 0 0 / 14%);
+  background: linear-gradient(45deg, #ac96f2, #9ea7fc);
+  color: #fff;
+}
+.header_nav ul {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+.main_file_wrapper {
+  padding: 50px 50px 0;
+  background: #fff;
+  height: calc(100vh - 80px);
+}
+.Upload_title_wrapper {
+  text-align: center;
+  padding-bottom: 20px;
+}
+.Upload_title_wrapper h2 {
+  font-size: 54px;
+  line-height: 60px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.Upload_button_wrapper {
+  text-align: end;
+}
+.Upload_button_wrapper button {
+  background: #000;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+}
+.file_box_wrapper {
+  padding: 50px 0 0;
+}
+.main_file_wrapper .grid {
+  padding: 0;
+  grid-template-columns: repeat(3,1fr);
+}
+.main_file_wrapper .grid .file_box {
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 1px 10px -1px rgb(0 0 0 / 14%);
+  background: #f6f8fa;
+}
+
+.main_file_wrapper .shadow-lg {
+  --tw-shadow: 0 4px 15px 0 rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  max-width: 1300px;
+}
+.file_box_wrapper .file_upload_field {
+  min-height: 200px;
+  justify-content: center;
+}
+.file_upload_field .icon img {
+  max-width: 100px;
+  width: 100%;
+}
+.file_upload_field div p {
+  font-size: 18px;
+  line-height: 20px;
+}
+.main_upload_button {
+  width: 100%;
+  max-width: 200px;
+  padding: 10px 20px;
+  margin: 0 auto;
+  display: block;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.pivot-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.pivot-table th {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+  border: 1px solid #ddd;
+}
+
+.pivot-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.even-row {
+  background-color: #f8f9fa;
+}
+
+.odd-row {
+  background-color: #ffffff;
+}
+
+.pivot-table tr:hover {
+  background-color: #e9ecef;
+}
+
+.customer {
+  font-weight: bold;
+  color: #333;
+}
+
+.total {
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+}
