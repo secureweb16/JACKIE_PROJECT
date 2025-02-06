@@ -178,7 +178,11 @@ export const GET = async (req) => {
     const files = await collection.find({ userId: new ObjectId(userIdFromToken) }).toArray();
 
     // Remove 'data' field from each file
-    const filteredFiles = files.map(({ ...fileWithoutData }) => fileWithoutData);
+    // const filteredFiles = files.map(({ ...fileWithoutData }) => fileWithoutData);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const filteredFiles = files.map(({ data, ...fileWithoutData }) => fileWithoutData);
+
     return new Response(JSON.stringify({ success: true, files: filteredFiles }), { status: 200 });
   } catch (error) {
     console.error(error);
