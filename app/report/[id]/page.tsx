@@ -60,7 +60,7 @@ const Page = () => {
 
   useEffect(() => {
     if (id) {
-      // fetchFileDetails(); 
+      fetchFileDetails(); 
     }
   }, [id]); 
 
