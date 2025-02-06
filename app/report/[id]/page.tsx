@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
@@ -59,7 +60,7 @@ const Page = () => {
 
   useEffect(() => {
     if (id) {
-      fetchFileDetails(); 
+      // fetchFileDetails(); 
     }
   }, [id]); 
 
