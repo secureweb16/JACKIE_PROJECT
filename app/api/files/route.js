@@ -98,84 +98,84 @@
 //       );
 //     }
 // };
-// latest optimise code
 
-// import jwt from "jsonwebtoken";
-// import { connectToDatabase } from "../../lib/mongodb";
-// import { ObjectId } from 'mongodb';
 
-// const SECRET_KEY = "your_secret_key";
+import jwt from "jsonwebtoken";
+import { connectToDatabase } from "../../lib/mongodb";
+import { ObjectId } from 'mongodb';
 
-// export const GET = async (req) => {
-//   const url = new URL(req.url);
-//   const reportId = url.searchParams.get('id');
+const SECRET_KEY = "your_secret_key";
+
+export const GET = async (req) => {
+  const url = new URL(req.url);
+  const reportId = url.searchParams.get('id');
   
-//   if (!reportId) {
-//     return new Response(
-//       JSON.stringify({ success: false, message: "Report ID is required" }),
-//       { status: 400 }
-//     );
-//   }
+  if (!reportId) {
+    return new Response(
+      JSON.stringify({ success: false, message: "Report ID is required" }),
+      { status: 400 }
+    );
+  }
 
-//   const token = req.headers.get("cookie")?.split(";").find(cookie => cookie.trim().startsWith("authToken="))?.split("=")[1];
+  const token = req.headers.get("cookie")?.split(";").find(cookie => cookie.trim().startsWith("authToken="))?.split("=")[1];
 
-//   if (!token) {
-//     return new Response(
-//       JSON.stringify({ success: false, message: "No token provided" }),
-//       { status: 401 }
-//     );
-//   }
+  if (!token) {
+    return new Response(
+      JSON.stringify({ success: false, message: "No token provided" }),
+      { status: 401 }
+    );
+  }
 
-//   try {
-//     const decoded = jwt.verify(token, SECRET_KEY);
-//     const { userId: userIdFromToken } = decoded;
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const { userId: userIdFromToken } = decoded;
 
-//     const db = await connectToDatabase();
-//     const report = await db.collection("files").findOne({ 
-//       _id: new ObjectId(reportId),
-//       userId: new ObjectId(userIdFromToken)
-//     });
+    const db = await connectToDatabase();
+    const report = await db.collection("files").findOne({ 
+      _id: new ObjectId(reportId),
+      userId: new ObjectId(userIdFromToken)
+    });
 
-//     if (!report) {
-//       return new Response(
-//         JSON.stringify({ success: false, message: "Report not found" }),
-//         { status: 404 }
-//       );
-//     }
+    if (!report) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Report not found" }),
+        { status: 404 }
+      );
+    }
 
-//     const rawData = report.data;
+    const rawData = report.data;
 
-//     // Extract unique dates and group data by vendorStyle
-//     const uniqueDates = Array.from(new Set(rawData.map(({ creationDate }) => creationDate?.split("T")[0]))).sort();
+    // Extract unique dates and group data by vendorStyle
+    const uniqueDates = Array.from(new Set(rawData.map(({ creationDate }) => creationDate?.split("T")[0]))).sort();
 
-//     const groupedData = rawData.reduce((acc, { vendorStyle, creationDate, qtyOrdered }) => {
-//       if (!vendorStyle) return acc;
+    const groupedData = rawData.reduce((acc, { vendorStyle, creationDate, qtyOrdered }) => {
+      if (!vendorStyle) return acc;
 
-//       const formattedDate = creationDate.split("T")[0];
-//       if (!acc[vendorStyle]) {
-//         acc[vendorStyle] = { Customer: vendorStyle, Total: 0 };
-//       }
-//       acc[vendorStyle][formattedDate] = (acc[vendorStyle][formattedDate] || 0) + qtyOrdered;
-//       acc[vendorStyle].Total += qtyOrdered;
+      const formattedDate = creationDate.split("T")[0];
+      if (!acc[vendorStyle]) {
+        acc[vendorStyle] = { Customer: vendorStyle, Total: 0 };
+      }
+      acc[vendorStyle][formattedDate] = (acc[vendorStyle][formattedDate] || 0) + qtyOrdered;
+      acc[vendorStyle].Total += qtyOrdered;
 
-//       return acc;
-//     }, {});
+      return acc;
+    }, {});
 
-//     const finalData = Object.values(groupedData).map(entry => {
-//       uniqueDates.forEach(date => {
-//         if (!(date in entry)) entry[date] = 0;
-//       });
-//       const { Total, ...rest } = entry;
-//       return { ...rest, Total };
-//     });
+    const finalData = Object.values(groupedData).map(entry => {
+      uniqueDates.forEach(date => {
+        if (!(date in entry)) entry[date] = 0;
+      });
+      const { Total, ...rest } = entry;
+      return { ...rest, Total };
+    });
 
-//     return new Response(JSON.stringify({ success: true, data: finalData }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, data: finalData }), { status: 200 });
 
-//   } catch (error) {
-//     console.error(error);
-//     return new Response(
-//       JSON.stringify({ success: false, message: "Invalid or expired token" }),
-//       { status: 401 }
-//     );
-//   }
-// };
+  } catch (error) {
+    console.error(error);
+    return new Response(
+      JSON.stringify({ success: false, message: "Invalid or expired token" }),
+      { status: 401 }
+    );
+  }
+};
