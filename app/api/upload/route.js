@@ -119,10 +119,12 @@ export const POST = async (req) => {
     const result = await collection.insertOne(mergedFileDetails);
 
     // Return the merged file details with the MongoDB ObjectId
+    const { data, ...fileDetailsWithoutData } = mergedFileDetails;
+   console.log(data)
     return new Response(
       JSON.stringify({
         success: true,
-        fileDetails: { ...mergedFileDetails, _id: result.insertedId.toString() },
+        fileDetails: { ...fileDetailsWithoutData, _id: result.insertedId.toString() },
       }),
       { status: 200 }
     );
@@ -175,7 +177,9 @@ export const GET = async (req) => {
     const collection = db.collection("files");
     const files = await collection.find({ userId: new ObjectId(userIdFromToken) }).toArray();
 
-    return new Response(JSON.stringify({ success: true, files }), { status: 200 });
+    // Remove 'data' field from each file
+    const filteredFiles = files.map(({ ...fileWithoutData }) => fileWithoutData);
+    return new Response(JSON.stringify({ success: true, files: filteredFiles }), { status: 200 });
   } catch (error) {
     console.error(error);
     return new Response(
@@ -184,3 +188,4 @@ export const GET = async (req) => {
     );
   }
 };
+
