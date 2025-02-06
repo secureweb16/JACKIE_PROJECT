@@ -17,6 +17,7 @@ interface UploadedDocument {
 
 export default function FileUpload() {
   const [files, setFiles] = useState<(File | null)[]>([null, null, null]);
+  console.log(files, "files");
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -63,13 +64,15 @@ export default function FileUpload() {
     const updatedFiles = [...files];
     updatedFiles[index] = null;
     setFiles(updatedFiles);
-
-    // Reset the file input value so that user can select the same file again
-    const fileInput = document.getElementById(
-      `file-input-${index}`
-    ) as HTMLInputElement;
-    if (fileInput) fileInput.value = "";
+  
+    // Reset the file input by changing its key, forcing it to re-render
+    setTimeout(() => {
+      const fileInput = document.getElementById(`file-input-${index}`) as HTMLInputElement;
+      if (fileInput) fileInput.value = ""; // Clear the file input
+    }, 0);
   };
+  
+  
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -99,24 +102,25 @@ export default function FileUpload() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+  
     if (files.some((file) => file === null)) {
       setError("Please select all 3 files.");
       return;
     }
-
+  
     // Define the correct order of files
     const orderedFiles: (File | null)[] = [
       files[0], // Estore(R) file - First box
       files[1], // CIN & DATA(R) file - Second box
       files[2], // SPS DATA(R) file - Third box
     ];
-
+  
     // Create a new FormData object and append the files in the desired order
     const formData = new FormData();
     orderedFiles.forEach((file) => {
       if (file) formData.append("files", file);
     });
-
+  
     try {
       setIsUploading(true);
       const response = await fetch("/api/upload", {
@@ -125,11 +129,11 @@ export default function FileUpload() {
       });
       const data = await response.json();
       setIsUploading(false);
+  
       if (data.success) {
         setFiles([null, null, null]);
         fetchFileDetails();
-        toast.success("Files Upload Successfully");
-
+        toast.success("Files uploaded successfully");
         setSuccess("Files uploaded successfully.");
         router.push("/report");
         setIsModalOpen(false);
@@ -138,17 +142,25 @@ export default function FileUpload() {
           "Invalid file type! Please upload a correct file in the box."
         );
         setFiles([null, null, null]);
-
+  
+        // Reset file inputs after an invalid attempt
+        orderedFiles.forEach((file, index) => {
+          if (file === null) {
+            const fileInput = document.getElementById(`file-input-${index}`) as HTMLInputElement;
+            if (fileInput) fileInput.value = ""; // Reset the input value
+          }
+        });
+  
         setTimeout(() => setError(null), 5000);
       }
     } catch {
-      toast.error("Somethng went wrong please try again  ");
+      toast.error("Something went wrong. Please try again.");
       setFiles([null, null, null]);
-
       setIsUploading(false);
       setError("Error uploading files. Please try again.");
     }
   };
+  
 
   const handleLogout = () => {
     Cookies.remove("authToken");
@@ -227,6 +239,7 @@ export default function FileUpload() {
                     <input
                       id={`file-input-0`}
                       type="file"
+                      key={files[0]?.name || 0}
                       onChange={(e) => handleFileChange(0, e)}
                       className="hidden"
                       accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -273,6 +286,7 @@ export default function FileUpload() {
                     <input
                       id={`file-input-1`}
                       type="file"
+                      key={files[1]?.name || 1} 
                       onChange={(e) => handleFileChange(1, e)}
                       className="hidden"
                       accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -319,6 +333,7 @@ export default function FileUpload() {
                     <input
                       id={`file-input-2`}
                       type="file"
+                      key={files[2]?.name || 2} 
                       onChange={(e) => handleFileChange(2, e)}
                       className="hidden"
                       accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
